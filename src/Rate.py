@@ -1,9 +1,7 @@
-import requests
-import re
 import time
 import sys
+import NSERateModule
 
-token="(lastPrice\":)(\")([0-9\.]+)(\")"
 time_rate = []
 
 simulated_rates = [573,577,582,587,584,594,600,595,593,591,590]
@@ -15,10 +13,7 @@ debug = True
 def grep_rate(url,_pass):
     if simulation:
         return simulated_rates[_pass]
-    r = re.search(token,requests.get(url).content).group(3)
-    if debug :
-        print "Current Rate " + str(r)
-    return float(r)
+    return NSERateModule.get_rate(url)
 
 
 def my_print(str):
@@ -57,7 +52,8 @@ def reverse_buy_process(args):
                     my_print("Dip starts with diff with peak " + str(peak_rate - current_rate)
                          + " Profit " + str(current_rate - buy_price))
                     if (peak_rate - current_rate) >= peak_diff and  current_rate - buy_price >= min_profit:
-                        print("Wake up. This is the time to sell Current Rate is " + str(current_rate) + " Peak Rate is " + str(peak_rate))
+                        print("Wake up. This is the time to sell Current Rate is " + str(current_rate)
+                              + "Peak Rate is " + str(peak_rate))
             else:
                 print "we are not in profit as rate is " + str(current_rate)
         time_rate.append((current_time,current_rate))
@@ -97,6 +93,7 @@ def reverse_sell_process(args):
         time_rate.append((current_time,current_rate))
         time.sleep(int(args[7]))
         _pass = _pass + 1
+
 
 def main(args):
     if sys.argv[1] == 'B':
