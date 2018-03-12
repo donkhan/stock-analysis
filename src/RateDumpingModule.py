@@ -11,6 +11,12 @@ stocks.append(
 stocks.append(
     { 'money-control-url' : "http://www.moneycontrol.com/india/stockpricequote/infrastructure-general/gmrinfrastructure/GI27", 'name' : 'GMR'}
 )
+stocks.append(
+    { 'money-control-url' : "http://www.moneycontrol.com/india/stockpricequote/power-generation-distribution/relianceinfrastructure/RI38", 'name' : 'RELINFRA'}
+)
+stocks.append(
+    { 'money-control-url' : "http://www.moneycontrol.com/india/stockpricequote/leather-products/bataindia/BI01", 'name' : 'BATAINDIA'}
+)
 
 
 def get_price_nse(stock):
