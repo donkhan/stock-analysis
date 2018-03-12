@@ -13,4 +13,4 @@ def get_rate(url):
             line = line.split("</strong>")[0]
             return float(line)
 
-print get_rate("http://www.moneycontrol.com/india/stockpricequote/auto-ancillaries/ricoauto/RA04")
+#print get_rate("http://www.moneycontrol.com/india/stockpricequote/auto-ancillaries/ricoauto/RA04")

@@ -4,40 +4,42 @@ import NSERateModule
 import MoneyControlRateModule
 from datetime import datetime
 
-stocks=[]
-stocks.append("GMRINFRA")
-stocks.append("RICOAUTO")
-stocks.append("RELINFRA")
-stocks.append("BATAINDIA")
-stocks.append("GLENMARK")
-
-mcstocks = []
-mcstocks.append({ 'url' : "http://www.moneycontrol.com/india/stockpricequote/auto-ancillaries/ricoauto/RA04", 'name' : 'RICO'})
-mcstocks.append({ 'url' : "http://www.moneycontrol.com/india/stockpricequote/auto-ancillaries/ricoauto/RA04", 'name' : 'RICO'})
+stocks = []
+stocks.append(
+    { 'money-control-url' : "http://www.moneycontrol.com/india/stockpricequote/auto-ancillaries/ricoauto/RA04", 'name' : 'RICO'}
+)
+stocks.append(
+    { 'money-control-url' : "http://www.moneycontrol.com/india/stockpricequote/infrastructure-general/gmrinfrastructure/GI27", 'name' : 'GMR'}
+)
 
 
-def mc(args):
+def get_price_nse(stock):
+    url = "https://www.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=" + stock.get('name')
+    return NSERateModule.get_rate(url)
+
+
+def get_price_money_control_stock(stock):
+    url = stock.get('money-control-url')
+    return MoneyControlRateModule.get_rate(url)
+
+
+def get_price(stock,provider):
+    if provider == 'nse':
+        return get_price_nse(stock)
+    return get_price_money_control_stock(stock)
+
+
+def run(args):
     _pass = 0
-    while _pass < 7*60:
-        t = str(datetime.now())
-        for stock in mcstocks:
-            url = stock.get('url')
-            name = stock.get('name')
-            rate = MoneyControlRateModule.get_rate(url)
-            fd = open("data/"+name+"-NSE.dat","a")
-            fd.write(t + "  " + str(rate) + "\n")
-            fd.close()
-            _pass = _pass + 1
-        time.sleep(60)
-
-def nse(args):
-    _pass = 0
+    provider = sys.argv[1]
+    if provider is None:
+        provider = 'mc'
     while _pass < 7*60:
         t = str(datetime.now())
         for stock in stocks:
-            url = "https://www.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=" + stock
-            rate = NSERateModule.get_rate(url)
-            fd = open("data/"+stock+"-NSE.dat","a")
+            rate = get_price(stock,provider)
+            fd = open("data/"+stock.get('name')+"-NSE.dat","a")
+            print stock.get('name') + "->" + str(rate)
             fd.write(t + "  " + str(rate) + "\n")
             fd.close()
             _pass = _pass + 1
@@ -45,4 +47,5 @@ def nse(args):
 
 
 if __name__ == "__main__":
-    nse(sys.argv)
+    print sys.argv
+    run(sys.argv)
