@@ -27,6 +27,6 @@ def get_rate(url):
     return r
 
 stock = "RICOAUTO"
-url = "https://www.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=" + stock
-print  get_rate(url)
+#url = "https://www.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=" + stock
+#print  get_rate(url)
 #from_file()
